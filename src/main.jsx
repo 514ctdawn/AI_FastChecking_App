@@ -6,7 +6,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/AI_FastChecking_App">
       <App />
     </BrowserRouter>
   </React.StrictMode>,
