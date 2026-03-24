@@ -6,6 +6,7 @@ import { useVerifications } from '../context/VerificationsContext'
 import { mockVerifyContent, generateId } from '../utils/mockVerification'
 import Sparkline from '../components/Sparkline'
 import TrustIndicator from '../components/TrustIndicator'
+import SocialIntegrationHub from '../components/SocialIntegrationHub'
 
 const formatMeta = (platform, date) => {
   const platformKey = platform.toUpperCase().replace(/\s/g, '')
@@ -237,7 +238,7 @@ export default function MobileApp() {
           </section>
         )}
 
-        {activeTab === 'tutorial' && <TutorialSimulation />}
+        {activeTab === 'tutorial' && <SocialIntegrationHub />}
       </main>
 
       {/* CTA - Multi-step with quick-access camera & mic */}
@@ -352,7 +353,7 @@ export default function MobileApp() {
           {[
             { id: 'home', label: '主頁', Icon: Home },
             { id: 'library', label: '查核庫', Icon: Library },
-            { id: 'tutorial', label: '使用教程', Icon: BookOpen },
+            { id: 'tutorial', label: '社群整合', Icon: BookOpen },
           ].map(({ id, label, Icon }) => (
             <button
               key={id}
@@ -371,43 +372,5 @@ export default function MobileApp() {
         </div>
       </nav>
     </div>
-  )
-}
-
-function TutorialSimulation() {
-  const [typed, setTyped] = useState('')
-
-  return (
-    <section>
-            <h2 className="text-[12px] font-semibold text-muted uppercase tracking-wider mb-2 font-mono">
-        練習標註機器人
-      </h2>
-      <p className="text-body text-muted mb-6">
-        在下方輸入 <strong className="text-navy-900">@VeriSenior</strong>，練習如何標註查核機器人。
-      </p>
-      <div className="bg-white rounded-ds-md p-5 border border-slate-200 shadow-ds-card" style={{ borderWidth: '0.5px' }}>
-        <div className="flex gap-3 mb-4">
-          <div className="w-12 h-12 rounded-full bg-slate-200 flex-shrink-0" />
-          <div>
-            <p className="font-bold text-navy-900">認識的人</p>
-            <p className="text-[11px] font-semibold text-muted uppercase font-mono">分享貼文 · 2H AGO</p>
-          </div>
-        </div>
-        <p className="text-navy-900 mb-4 font-medium">
-          「養生秘訣！每天早晨喝檸檬水可治糖尿病！」
-        </p>
-        <input
-          type="text"
-          value={typed}
-          onChange={(e) => setTyped(e.target.value)}
-          placeholder="輸入 @VeriSenior 以查核"
-          className="w-full text-body p-3.5 rounded-lg border border-slate-200 text-navy-900 focus:ring-2 focus:ring-klein/30 focus:border-klein outline-none"
-          style={{ borderWidth: '0.5px' }}
-        />
-        {typed.includes('@VeriSenior') && (
-          <p className="mt-3 text-sm font-semibold text-sage">✓ 做得好！</p>
-        )}
-      </div>
-    </section>
   )
 }
