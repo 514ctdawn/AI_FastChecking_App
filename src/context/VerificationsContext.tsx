@@ -39,7 +39,13 @@ function mockDetailsMap(): Record<string, VerificationDetail> {
   return out
 }
 
-const useMockFallback = import.meta.env.VITE_VERIFICATIONS_MOCK === 'true'
+// GitHub Pages can't host the backend API/webhooks.
+// Force mock mode when running on *.github.io without an explicit VITE_API_BASE.
+const useMockFallback =
+  import.meta.env.VITE_VERIFICATIONS_MOCK === 'true' ||
+  (typeof window !== 'undefined' &&
+    window.location.hostname.endsWith('github.io') &&
+    !import.meta.env.VITE_API_BASE)
 
 type VerificationsContextValue = {
   verifications: VerificationListItem[]
