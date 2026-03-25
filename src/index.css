@@ -7,7 +7,7 @@
     font-size: 16px;
   }
   body {
-    @apply text-body text-navy bg-surface antialiased tracking-tight;
+    @apply font-sans text-body text-navy bg-surface antialiased tracking-tight;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
   }
