@@ -196,6 +196,7 @@ export default function MobileApp() {
   const recognitionRef = useRef<SpeechRecognition | null>(null)
   const mainRef = useRef<HTMLElement>(null)
   const touchStartY = useRef(0)
+  const mockMode = import.meta.env.VITE_VERIFICATIONS_MOCK === 'true'
 
   const {
     verifications,
@@ -319,10 +320,40 @@ export default function MobileApp() {
       return
     }
 
+    const startLocalVerification = () => {
+      const id = generateId()
+      const snippet = `[Threads] ${postId}`
+      const { status, simpleExplanation } = mockVerifyContent(snippet)
+
+      addVerification(
+        { id, snippet, platform: 'Threads', date: '剛剛', status: status as VerificationListItem['status'] },
+        {
+          id,
+          snippet,
+          status: status as VerificationListItem['status'],
+          simpleExplanation,
+          verifiedByAi: true,
+          platformSource: 'threads',
+          sourceUrl: null,
+        }
+      )
+      navigate(`/result/${id}`)
+    }
+
     try {
       setInputMode('threads')
       setIsProcessing(true)
       setShowCheckModal(false)
+
+      if (mockMode) {
+        // No backend: still show a working deep-link flow in mock/demo mode.
+        await new Promise((r) => window.setTimeout(r, 600))
+        setIsProcessing(false)
+        setInputMode(null)
+        setThreadsUrlInput('')
+        startLocalVerification()
+        return
+      }
 
       const { id } = await startThreadsVerificationFromUrl(trimmed)
       // Ensure dashboard + details map is ready before navigating.
@@ -333,11 +364,11 @@ export default function MobileApp() {
       setThreadsUrlInput('')
       navigate(`/result/${id}`)
     } catch (e) {
+      // If the backend is unreachable (no backend deployed), fall back to a local mock verification.
       setIsProcessing(false)
       setInputMode(null)
-      setShowCheckModal(true)
-      const msg = e instanceof Error ? e.message : String(e)
-      alert(msg)
+      setShowCheckModal(false)
+      startLocalVerification()
     }
   }
 

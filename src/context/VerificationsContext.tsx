@@ -74,6 +74,12 @@ export function VerificationsProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const refreshVerifications = useCallback(async () => {
+    // When built with demo-only mode, do not attempt to call a non-existent backend.
+    if (useMockFallback) {
+      setBackendStatus('error')
+      return
+    }
+
     setBackendStatus('loading')
     try {
       const rows = await fetchLatestVerifications()
